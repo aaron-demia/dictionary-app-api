@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 function Login({ setToken }) {
 
-    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const handleSubmit = async (event) => {
@@ -10,7 +10,7 @@ function Login({ setToken }) {
         const response = await fetch("http://localhost:8000/api/user/token/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email , password })
         });
         const data = await response.json();
         if (data.token) {
@@ -23,7 +23,7 @@ function Login({ setToken }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" />
+            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
             <button type="submit">Login</button>
         </form>

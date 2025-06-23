@@ -5,19 +5,21 @@ import MyWords from './MyWords';
 import { Link, useNavigate } from 'react-router-dom';
 import './App.css'
 import Modal from 'react-modal';
-const navigate = useNavigate();
 
 
-Modal.setAppElement('#root');
 
 function App() {
-
+  
+  const navigate = useNavigate();
   const [words, setWords] = useState([])
   const [selectedWord, setSelectedWord] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [search, setSearch] = useState('')
 
+
+
   useEffect(() => {
+    if (!token) return
     const url = search
       ? `http://localhost:8000/api/word/words/?search=${encodeURIComponent(search)}`
       : 'http://localhost:8000/api/word/words/';
@@ -59,6 +61,18 @@ function App() {
   return (
     <>
       <div>
+        <div style={{ marginBottom: '1em' }}>
+          <button
+            onClick={() => {
+              localStorage.removeItem('token');
+              setToken(null);
+              // Optionally, redirect to home:
+              // navigate('/');
+            }}
+          >
+            Sign Out
+          </button>
+        </div>
         <div style={{ marginBottom: '1em' }}>
           <Link to="/my-words">
            <button>My Words</button>

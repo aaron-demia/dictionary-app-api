@@ -74,6 +74,14 @@ class UserWord(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+
+    
     def __str__(self):
-        return self.word
+        return self.word.title
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'word'], name='unique_user_word')
+        ]
+
 

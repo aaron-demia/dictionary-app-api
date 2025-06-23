@@ -19,10 +19,10 @@ class WordSerializer(serializers.ModelSerializer):
 
 class UserWordSerializer(serializers.ModelSerializer):
     """Serializer for User's Words"""
-
+    word_detail = WordSerializer(source='word', read_only=True)
     class Meta:
         model = UserWord
-        fields = ['id', 'word']
-        read_only_fields = ['id']
+        fields = ['id', 'word', 'word_detail']
+        read_only_fields = ['id', 'word_detail']
 
 
