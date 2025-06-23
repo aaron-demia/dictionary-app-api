@@ -54,3 +54,4 @@ class WordAdmin(admin.ModelAdmin):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Word, WordAdmin)
+admin.site.register(models.UserWord)

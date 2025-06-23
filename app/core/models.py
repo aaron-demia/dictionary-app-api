@@ -2,6 +2,7 @@
 Database models.
 """
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -63,4 +64,16 @@ class ExSentence(models.Model):
     def __str__(self):
         return self.sentence
 
+class UserWord(models.Model):
+    word = models.ForeignKey(
+        Word,
+        related_name="user_words", 
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    def __str__(self):
+        return self.word
 

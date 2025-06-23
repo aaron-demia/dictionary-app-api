@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Word, ExSentence
+from core.models import Word, ExSentence, UserWord
 
 
 class ExSentenceSerializer(serializers.ModelSerializer):
@@ -17,5 +17,12 @@ class WordSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'definition', 'frequency', 'exSentences']
         read_only_fields = ['id']
 
+class UserWordSerializer(serializers.ModelSerializer):
+    """Serializer for User's Words"""
+
+    class Meta:
+        model = UserWord
+        fields = ['id', 'word']
+        read_only_fields = ['id']
 
 

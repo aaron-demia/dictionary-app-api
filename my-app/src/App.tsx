@@ -1,8 +1,12 @@
 
 import { useEffect, useState } from 'react'
 import Login from './Login';
+import MyWords from './MyWords';
+import { Link, useNavigate } from 'react-router-dom';
 import './App.css'
 import Modal from 'react-modal';
+const navigate = useNavigate();
+
 
 Modal.setAppElement('#root');
 
@@ -26,6 +30,28 @@ function App() {
   }, [token, search]);
 
 
+  const addWord = (wordId) => {
+    fetch('http://localhost:8000/api/word/userWords/', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+      },
+      body: JSON.stringify({ word: wordId })
+    })
+   .then(res => {
+        if (res.ok) {
+          alert("Word added!");
+        } else {
+          alert("Failed to add word.");
+        }
+      });
+
+  }
+
+
+
+
   if (!token) {
     return <Login setToken={setToken} />;
   }
@@ -33,6 +59,12 @@ function App() {
   return (
     <>
       <div>
+        <div style={{ marginBottom: '1em' }}>
+          <Link to="/my-words">
+           <button>My Words</button>
+          </Link>
+        </div>
+
         <input
         type="text"
         placeholder="Search words..."
@@ -67,6 +99,7 @@ function App() {
                 <li>No example sentences.</li>
               )}
             </ul>
+            <button onClick={() => addWord(selectedWord.id)}>Add Word</button>
             <button onClick={() => setSelectedWord(null)}>Close</button>
           </div>
         )}

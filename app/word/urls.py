@@ -9,6 +9,7 @@ from word import views
 
 router = DefaultRouter()
 router.register('words', views.WordViewSet)
+router.register('userWords', views.UserWordViewSet)
 
 app_name = 'word'
 
