@@ -12,9 +12,10 @@ class ExSentenceSerializer(serializers.ModelSerializer):
 class WordSerializer(serializers.ModelSerializer):
     """Serializer for recipies"""
     exSentences = ExSentenceSerializer(many=True, required=False)
+    example_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Word
-        fields = ['id', 'title', 'definition', 'frequency', 'exSentences']
+        fields = ['id', 'title', 'definition', 'frequency', 'exSentences', 'example_count']
         read_only_fields = ['id']
 
 class UserWordSerializer(serializers.ModelSerializer):

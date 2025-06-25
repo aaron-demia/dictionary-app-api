@@ -8,6 +8,8 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.db.models import Count
+
 
 
 class UserManager(BaseUserManager):
@@ -36,7 +38,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system."""
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True, db_index=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -45,9 +47,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Word(models.Model):
     """Word in the system"""
-    title = models.CharField(max_length = 255)
+    title = models.CharField(max_length = 255, db_index=True)
     definition = models.TextField(blank=True)
-    frequency = models.IntegerField()
+    frequency = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.title
@@ -55,7 +58,8 @@ class Word(models.Model):
 
 class ExSentence(models.Model):
     """Example Sentence in the system"""
-    sentence = models.TextField()
+    sentence = models.TextField(db_index=True)
+    
     word = models.ForeignKey(
         Word,
         related_name="exSentences", 

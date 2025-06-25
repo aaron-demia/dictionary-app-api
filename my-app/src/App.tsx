@@ -15,21 +15,49 @@ function App() {
   const [selectedWord, setSelectedWord] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [count, setCount] = useState(0);
 
 
+
+
+
+  // useEffect(() => {
+  //   if (!token) return
+  //   const url = search
+  //     ? `http://localhost:8000/api/word/words/?search=${encodeURIComponent(search)}`
+  //     : 'http://localhost:8000/api/word/words/';
+
+  //   fetch(url, {
+  //     headers: { 'Authorization': `Token ${token}` }
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => setWords(data));
+  // }, [token, search]);
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+  
 
   useEffect(() => {
     if (!token) return
-    const url = search
-      ? `http://localhost:8000/api/word/words/?search=${encodeURIComponent(search)}`
-      : 'http://localhost:8000/api/word/words/';
-
+    let url = `http://localhost:8000/api/word/words/?page=${page}`;
+    if (search) {
+      url += `&search=${encodeURIComponent(search)}`;
+    }
+    
     fetch(url, {
-      headers: { 'Authorization': `Token ${token}` }
+    headers: { 'Authorization': `Token ${token}` }
+  })
+    .then(response => response.json())
+    .then(data => {
+      setWords(data.results);      
+      setCount(data.count);        
+      setTotalPages(Math.ceil(data.count / 50));
     })
-      .then(response => response.json())
-      .then(data => setWords(data));
-  }, [token, search]);
+
+  }, [token, search, page])
 
 
   const addWord = (wordId) => {
@@ -50,8 +78,6 @@ function App() {
       });
 
   }
-
-
 
 
   if (!token) {
@@ -92,6 +118,7 @@ function App() {
             <div key={word.id} style={{ marginBottom: '1em', padding: '0.5em', border: '1px solid #ccc' }} onClick={() => setSelectedWord(word)}>
               <strong>{word.title}</strong>
               <div>{word.definition}</div>
+              <div>{word.example_count}</div>
             </div>
           ))}
           <Modal
@@ -118,6 +145,11 @@ function App() {
           </div>
         )}
           </Modal>
+          <div>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Previous</button>
+            <span> Page {page} of {totalPages} </span>
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Next</button>
+          </div>
       </div>
     </>
   )
