@@ -20,7 +20,7 @@ class WordViewSet(viewsets.ModelViewSet):
         if search:
             queryset = queryset.filter(
                 Q(title__icontains=search) |
-                Q(definition__icontains=search) |25 
+                Q(definition__icontains=search) |
                 Q(exSentences__sentence__icontains=search)
             ).distinct()
         return queryset

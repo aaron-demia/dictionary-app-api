@@ -25,7 +25,7 @@ class Command(BaseCommand):
         for entry in root.findall('./entry'):
             if count >= MAX_WORDS:
                 break
-            # Get word: prefer first <keb>, else first <reb>
+
             keb_el = entry.find('k_ele/keb')
             if keb_el is not None:
                 word = keb_el.text
@@ -36,7 +36,6 @@ class Command(BaseCommand):
             if not word:
                 continue
 
-            # Get all <gloss> text for this entry
             glosses = []
             for sense in entry.findall('sense'):
                 for gloss in sense.findall('gloss'):
@@ -50,7 +49,6 @@ class Command(BaseCommand):
             )
             count += 1
 
-            # Example sentences (from <example> under <sense>)
             for sense in entry.findall('sense'):
                 for example in sense.findall('example'):
                     jp_sent = None
