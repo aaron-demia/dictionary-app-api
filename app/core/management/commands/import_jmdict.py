@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 from django.core.management.base import BaseCommand
 from core.models import Word, ExSentence
+import gzip
+import io
 
 class Command(BaseCommand):
     help = "Import words and example sentences from JMdict XML file"
@@ -19,7 +21,27 @@ class Command(BaseCommand):
         count = 0
         example_count = 0
 
-        tree = ET.parse(filename)
+        print(f"DEBUG filename received: {filename}")
+        print(f"DEBUG filename endswith .gz: {filename.endswith('.gz')}")
+
+
+        try:
+            if filename.endswith('.gz'):
+                with gzip.open(filename, 'rb') as f:
+                    first_bytes = f.read(100)
+                    print("DEBUG first bytes (raw):", first_bytes[:50])
+                    f.seek(0)
+                    decoded = io.TextIOWrapper(f, encoding='utf-8')
+                    print("DEBUG first line:", decoded.readline())
+                    decoded.seek(0)
+                    tree = ET.parse(decoded)
+            else:
+                tree = ET.parse(filename)
+        except Exception as e:
+            print("ERROR while parsing XML:", e)
+            return
+
+        
         root = tree.getroot()
         MAX_WORDS = 10000
         for entry in root.findall('./entry'):
