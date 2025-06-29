@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+type UserWord = {
+  id: number;
+  word_detail: {
+    title: string;
+    definition: string;
+  };
+};
 
 function MyWords() {
-    const [userWords, setUserWords] = useState({ results: [], count: 0 });
-    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [userWords, setUserWords] = useState<{ results: UserWord[]; count: number  }>({ results: [], count: 0 });
+    const [token] = useState(localStorage.getItem('token'));
     const [page, setPage] = useState(1);
     const PAGE_SIZE = 50; // match your backend
 
@@ -17,7 +24,7 @@ function MyWords() {
       .then(data => setUserWords(data));
   }, [token, page]);
 
-  console.log(userWords);
+
 
   return (
         <div>

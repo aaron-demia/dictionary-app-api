@@ -1,11 +1,15 @@
 import {useState} from 'react';
 
-function Login({ setToken }) {
+type LoginProps = {
+  setToken: (token: string) => void;
+};
+
+function Login({ setToken }: LoginProps) {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const response = await fetch("http://localhost:8000/api/user/token/", {
         method: "POST",

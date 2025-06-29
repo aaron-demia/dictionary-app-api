@@ -1,23 +1,36 @@
 
 import { useEffect, useState } from 'react'
 import Login from './Login';
-import MyWords from './MyWords';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './App.css'
 import Modal from 'react-modal';
+
+type ExSentence = {
+  id: number;
+  sentence: string;
+}
+
+
+type Word = {
+  id: number;
+  title: string;
+  definition: string;
+  example_count: number;
+  exSentences: ExSentence[]
+};
 
 
 
 function App() {
   
-  const navigate = useNavigate();
-  const [words, setWords] = useState([])
-  const [selectedWord, setSelectedWord] = useState(null);
+  const [words, setWords] = useState<Word[]>([])
+  const [selectedWord, setSelectedWord] = useState<Word | null>(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [count, setCount] = useState(0);
+  const [, setCount] = useState<number>(0);
+
 
 
 
@@ -60,7 +73,7 @@ function App() {
   }, [token, search, page])
 
 
-  const addWord = (wordId) => {
+  const addWord = (wordId: number) => {
     fetch('http://localhost:8000/api/word/userWords/', {
       method: "POST",
       headers: {
