@@ -11,7 +11,7 @@ function Login({ setToken }: LoginProps) {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const response = await fetch("http://localhost:8000/api/user/token/", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email , password })

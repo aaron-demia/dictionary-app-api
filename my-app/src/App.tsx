@@ -55,7 +55,7 @@ function App() {
 
   useEffect(() => {
     if (!token) return
-    let url = `http://localhost:8000/api/word/words/?page=${page}`;
+    let url = `${import.meta.env.VITE_API_URL}/api/word/words/?page=${page}`;
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;
     }
@@ -74,7 +74,7 @@ function App() {
 
 
   const addWord = (wordId: number) => {
-    fetch('http://localhost:8000/api/word/userWords/', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/word/userWords/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
