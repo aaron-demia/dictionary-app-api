@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from core.models import Word, ExSentence
 import gzip
 import io
+import time
 
 class Command(BaseCommand):
     help = "Import words and example sentences from JMdict XML file"
@@ -43,7 +44,7 @@ class Command(BaseCommand):
 
         
         root = tree.getroot()
-        MAX_WORDS = 10000
+        MAX_WORDS = 1000
         for entry in root.findall('./entry'):
             if count >= MAX_WORDS:
                 break
@@ -87,7 +88,8 @@ class Command(BaseCommand):
                     if en_sent is not None and en_sent.text:
                         ExSentence.objects.create(word=word_obj, sentence=en_sent.text)
                         example_count += 1
-
+            if count % 100 == 0:
+                time.sleep(0.01)
 
             if count % 1000 == 0:
                 self.stdout.write(f"Imported {count} words...")
